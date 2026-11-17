@@ -1,0 +1,25 @@
+# Assignment 3 – CO3 Report
+
+## Q1 – ATM exception design (6)
+Relevant hierarchy: Throwable → Error (JVM/resource failures, normally not caught) and Exception → IOException (checked) / RuntimeException (unchecked input and illegal-amount errors). NumberFormatException is caught before broader IllegalArgumentException/Exception. Missing card file produces FileNotFoundException/IOException. Insufficient balance and negative amount are domain validation failures and should be represented by a clear checked or domain exception. finally runs after normal completion or exception (except abrupt JVM termination) and is used to release resources. Catching every failure as Exception hides distinctions; a top-level boundary may log unexpected exceptions after specific cases are handled. Exception-free alternative uses Scanner.hasNextDouble and explicit error codes; validation is O(1), while exception construction captures a stack trace and is more expensive.
+
+## Q2 – Exam portal custom exceptions (7)
+Hierarchy: ExamException (checked) → ExamClosedException, StudentNotRegisteredException, SubmissionStorageException; FileTooLargeException can also extend ExamException. Checked exceptions are appropriate because callers can recover or present an actionable rejection. Storage wraps IOException as SubmissionStorageException with the cause preserved. Flow: Storage → service → controller catch → user-safe message; log cause internally. If unchecked, signatures need not declare throws and callers may omit catches, which can hide recovery obligations. Stack trace capture is O(depth) time/space; chaining retains a reference to the cause and its trace.
+
+## Q3 – Resource safety (7)
+Manual close in finally can leak a resource if a later open fails before the resource variable is assigned or if close is omitted on one branch. try-with-resources closes resources in reverse declaration order, even on exceptions; a close failure is attached as a suppressed exception if another exception is already propagating. It is not sufficient for atomic report publication: write to a temporary file, validate, then atomically move it into place. Processing f files is O(total bytes); try-with-resources holds only currently scoped resources and reliably closes each, whereas a broken implementation may retain O(f) handles.
+
+## Q4 – Thread lifecycle (7)
+A station can extend Thread or implement Runnable; Runnable separates work from thread management and permits other superclass inheritance. start() schedules a new thread; run() called directly is an ordinary method call. States: NEW → RUNNABLE → (BLOCKED/WAITING/TIMED_WAITING) → TERMINATED. sleep creates timed waiting; join makes main wait for completion. Scheduler order is nondeterministic; correctness must use shared-state coordination, not output order. ExecutorService with p workers bounds thread count; n similar jobs take approximately O(n/p) work time plus scheduling overhead, while one-thread-per-job consumes O(n) thread stacks.
+
+## Q5 – Seat-booking race (6)
+The check-then-set operation is one critical section. Without a lock, two threads can both observe false before either writes true. synchronized serialises access to the same monitor; a method locks the whole method, while a block locks only the critical section. AtomicBoolean.compareAndSet is a lock-free alternative per seat; ReentrantLock adds explicit lock/unlock control; a concurrent map can use putIfAbsent. Each design stores O(s) seat state; CAS/lock metadata adds small per-seat/per-lock overhead.
+
+## Q6 – Deadlock and producer-consumer (7)
+Deadlock requires mutual exclusion, hold-and-wait, no pre-emption and circular wait. Prevent circular wait by locking accounts in a globally consistent order (e.g. ascending immutable account ID). Producer-consumer uses a bounded buffer; wait must be in a while loop under the same monitor because of spurious wakeups and condition changes. notifyAll wakes all waiters so each rechecks its condition. sleep does not release a monitor; wait releases it. The buffer invariant is 0 ≤ count ≤ 5.
+
+## Q7 – Fault-tolerant concurrent file processing (10)
+For 10,000 independent files use ExecutorService with a fixed pool, Callable<Result> per file and Future<Result> collection. Each task validates and catches file-local IOException/format errors, returning success/failure metadata so one bad file does not cancel the batch. Store results in a thread-safe collection or collect futures in the coordinator thread. Use try-with-resources for every input. Pool size should be benchmarked at 1,2,4,8; more threads can hurt due to disk contention and context switching. Complexity is O(total bytes + number of files); memory is O(p + results) plus bounded task queue. Compared with one thread per file, a fixed pool caps stacks and resource pressure. Parallel streams use the common pool and provide less explicit resource control.
+
+### Contribution record
+Both partners must participate in every question. Fill the official Student A / Student B / Joint contribution table with actual roles after group discussion and local verification. Do not submit invented individual evidence.
