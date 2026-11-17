@@ -38,4 +38,4 @@ All active tickets exited: PASS
 All smart-parking tests passed.
 ```
 
-The Java files were compiled and executed locally using Java 17. The supplied Task 3 and Task 8 expected outputs match exactly.
+These are the expected outputs based on the completed source code. Please compile and run the programs on your own computer, verify the results, and capture your own execution screenshots before submission.
