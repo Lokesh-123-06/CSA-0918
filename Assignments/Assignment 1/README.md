@@ -1,7 +1,7 @@
 # Assignment 1 – Campus Smart-Parking System
 
-**Name:** Lokesh (K. Lokesh Chandra)  
-**Register Number:** 192425358  
+**Name:** Lokesh  
+**Register Number:** To be filled in by the student  
 **Course:** Programming in Java – CO1  
 **Java version:** Java 17 or later
 
