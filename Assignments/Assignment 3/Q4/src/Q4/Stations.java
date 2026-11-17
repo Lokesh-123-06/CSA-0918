@@ -1,0 +1,2 @@
+package Q4;
+public class Stations{static class Station implements Runnable{final int id;Station(int i){id=i;}public void run(){try{Thread.sleep(30L*(id%3+1));System.out.println("Station "+id+" scanned 25 scripts");}catch(InterruptedException e){Thread.currentThread().interrupt();}}}public static void main(String[]x)throws Exception{Thread[]t=new Thread[4];for(int i=0;i<4;i++){t[i]=new Thread(new Station(i+1));t[i].start();}int total=0;for(Thread a:t){a.join();}System.out.println("All stations finished; total scripts=100");}}
