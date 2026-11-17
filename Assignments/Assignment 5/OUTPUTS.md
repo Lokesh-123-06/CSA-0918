@@ -1,0 +1,3 @@
+# Assignment 5 – Outputs and execution evidence
+
+B1 PassStore: valid P1003 should be found; malformed P1002 line should be skipped and return null. BufferedLineCounter prints Lines: 3. For B3, run schema.sql and execute PassLoader with MySQL Connector/J; verify row counts before/after an injected invalid row and transaction rollback. For B2, compare a concatenated login query with PreparedStatement using a disposable local users table only. Fill MEASUREMENTS.csv with five repeated local runs and add screenshots/logs. Timings are environment-specific and are intentionally blank until execution.
